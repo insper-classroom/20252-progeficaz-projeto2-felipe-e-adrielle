@@ -1,5 +1,12 @@
+import os
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
 def main():
-    print("Hello from projeto2-progeficaz!")
+    print(os.getenv("DATABASE_URL"))
 
 
 if __name__ == "__main__":
