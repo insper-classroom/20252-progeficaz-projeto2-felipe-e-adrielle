@@ -4,6 +4,8 @@ blinker==1.9.0
     # via flask
 click==8.2.1
     # via flask
+colorama==0.4.6
+    # via click
 flask==3.1.2
     # via projeto2-progeficaz (pyproject.toml)
 itsdangerous==2.2.0
@@ -15,6 +17,8 @@ markupsafe==3.0.2
     #   flask
     #   jinja2
     #   werkzeug
+mysql-connector-python==9.4.0
+    # via projeto2-progeficaz (pyproject.toml)
 python-dotenv==1.1.1
     # via projeto2-progeficaz (pyproject.toml)
 werkzeug==3.1.3
