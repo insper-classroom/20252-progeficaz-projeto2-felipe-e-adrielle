@@ -14,7 +14,8 @@ def get_db_connection():
             host=os.getenv("DATABASE_HOST"),
             port=os.getenv("DATABASE_PORT"),
             database=os.getenv("DATABASE_DB"),
-            autocommit=True
+            autocommit=True,
+             connection_timeout=5 
         )
         if connection.is_connected():
             return connection
