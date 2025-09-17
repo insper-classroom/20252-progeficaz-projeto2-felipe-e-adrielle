@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, url_for
 from db import get_db_connection
 
 app = Flask(__name__)
@@ -10,7 +10,14 @@ def home():
     cursor = conn.cursor()
     cursor.execute("SELECT COUNT(*) FROM imoveis;")
     count = cursor.fetchone()[0]
-    return jsonify({"message": "API is running", "imoveis_count": count})
+    return jsonify({
+        "message": "API is running",
+        "imoveis_count": count,
+        "_links": {
+            "self": url_for("home", _external=True),
+            "imoveis": url_for("get_imoveis", _external=True)
+        }
+    })
 
 
 @app.route("/imoveis", methods=["GET"])
@@ -26,14 +33,19 @@ def get_imoveis():
     cursor = conn.cursor(dictionary=True)
 
     if tipo:
-     cursor.execute("SELECT * FROM imoveis WHERE LOWER(tipo) = LOWER(%s);", (tipo,))
-
+        cursor.execute("SELECT * FROM imoveis WHERE LOWER(tipo) = LOWER(%s);", (tipo,))
     elif cidade:
         cursor.execute("SELECT * FROM imoveis WHERE cidade = %s;", (cidade,))
     else:
         cursor.execute("SELECT * FROM imoveis;")
     
     imoveis = cursor.fetchall()
+    for imovel in imoveis:
+        imovel["_links"] = {
+            "self": url_for("get_imovel", id=imovel["id"], _external=True),
+            "update": url_for("update_imovel", id=imovel["id"], _external=True),
+            "delete": url_for("delete_imovel", id=imovel["id"], _external=True)
+        }
     return jsonify(imoveis)
 
 
@@ -44,6 +56,11 @@ def get_imovel(id):
     cursor.execute("SELECT * FROM imoveis WHERE id = %s;", (id,))
     imovel = cursor.fetchone()
     if imovel:
+        imovel["_links"] = {
+            "self": url_for("get_imovel", id=id, _external=True),
+            "update": url_for("update_imovel", id=id, _external=True),
+            "delete": url_for("delete_imovel", id=id, _external=True)
+        }
         return jsonify(imovel)
     return jsonify({"error": "Imóvel não encontrado"}), 404
 
@@ -70,7 +87,16 @@ def add_imovel():
     
     cursor.execute(sql, values)
     conn.commit()
-    return jsonify({"message": "Imóvel adicionado com sucesso", "id": cursor.lastrowid}), 201
+    new_id = cursor.lastrowid
+    return jsonify({
+        "message": "Imóvel adicionado com sucesso",
+        "id": new_id,
+        "_links": {
+            "self": url_for("get_imovel", id=new_id, _external=True),
+            "update": url_for("update_imovel", id=new_id, _external=True),
+            "delete": url_for("delete_imovel", id=new_id, _external=True)
+        }
+    }), 201
 
 
 @app.route("/imoveis/<int:id>", methods=["PUT"])
@@ -97,7 +123,14 @@ def update_imovel(id):
     cursor.execute(sql, values)
     conn.commit()
     if cursor.rowcount:
-        return jsonify({"message": "Imóvel atualizado com sucesso"})
+        return jsonify({
+            "message": "Imóvel atualizado com sucesso",
+            "_links": {
+                "self": url_for("get_imovel", id=id, _external=True),
+                "update": url_for("update_imovel", id=id, _external=True),
+                "delete": url_for("delete_imovel", id=id, _external=True)
+            }
+        })
     return jsonify({"error": "Imóvel não encontrado"}), 404
 
 
