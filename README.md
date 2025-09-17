@@ -74,25 +74,30 @@ uv run pytest test_imoveis.py -v
 
 ## 🚀 Deploy
 
-**Status**: ⏳ Pendente
-- [ ] Deploy na AWS EC2
-- [ ] Link da API será adicionado aqui
+**Status**: ✅ **Deployado na AWS EC2**
+
+🌐 **API Online**: http://34.229.133.226
+
+### Endpoints Disponíveis:
+- **Home**: http://34.229.133.226/
+- **API Docs**: http://34.229.133.226/api/v1/docs
+- **Imóveis**: http://34.229.133.226/api/v1/imoveis
 
 ## 📝 Exemplos de Uso
 
 ### Listar imóveis com paginação
 ```bash
-curl "http://localhost:5000/api/v1/imoveis?page=1&per_page=10"
+curl "http://34.229.133.226/api/v1/imoveis?page=1&per_page=10"
 ```
 
 ### Buscar por tipo e ordenar por valor
 ```bash
-curl "http://localhost:5000/api/v1/imoveis?tipo=casa&sort=valor&order=desc"
+curl "http://34.229.133.226/api/v1/imoveis?tipo=casa&sort=valor&order=desc"
 ```
 
 ### Criar novo imóvel
 ```bash
-curl -X POST "http://localhost:5000/api/v1/imoveis" \
+curl -X POST "http://34.229.133.226/api/v1/imoveis" \
   -H "Content-Type: application/json" \
   -d '{
     "logradouro": "Rua das Flores",
@@ -108,7 +113,7 @@ curl -X POST "http://localhost:5000/api/v1/imoveis" \
 
 ### Documentação da API
 ```bash
-curl "http://localhost:5000/api/v1/docs"
+curl "http://34.229.133.226/api/v1/docs"
 ```
 
 ## 🎯 Conceito Alcançado
@@ -122,3 +127,4 @@ curl "http://localhost:5000/api/v1/docs"
 - ✅ Validação robusta
 - ✅ Documentação integrada
 - ✅ 22 testes automatizados
+- ✅ **Deploy na AWS EC2** 🌐
